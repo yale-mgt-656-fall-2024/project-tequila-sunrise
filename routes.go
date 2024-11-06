@@ -13,5 +13,11 @@ func createRoutes() chi.Router {
     r.Get("/events/new", newEventFormController)
     r.Post("/events/new", createNewEventController)
 
+    // Route for event details
+    r.Get("/events/{id}", eventDetailController)
+
+    // Optional: Route for RSVP (if implementing RSVP functionality)
+    r.Post("/events/{id}/rsvp", rsvpController)
+
     return r
 }

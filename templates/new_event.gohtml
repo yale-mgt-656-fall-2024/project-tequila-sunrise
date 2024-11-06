@@ -5,20 +5,26 @@
 {{end}}
 
 {{define "content"}}
-<h1>Create a New Event</h1>
-<form method="POST" action="/events/new">
-    <label for="title">Title:</label><br>
-    <input type="text" id="title" name="title" required><br><br>
-
-    <label for="location">Location:</label><br>
-    <input type="text" id="location" name="location" required><br><br>
-
-    <label for="image">Image URL:</label><br>
-    <input type="text" id="image" name="image"><br><br>
-
-    <label for="date">Date and Time:</label><br>
-    <input type="datetime-local" id="date" name="date" required><br><br>
-
-    <input type="submit" value="Create Event">
-</form>
+<div class="container">
+    <h1>Create a New Event</h1>
+    <form method="POST" action="/events/new">
+        <div class="form-input">
+            <label class="form-label" for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="image">Image URL:</label>
+            <input type="url" id="image" name="image">
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="date">Date and Time:</label>
+            <input type="datetime-local" id="date" name="date" required>
+        </div>
+        <button type="submit" class="button">Create Event</button>
+    </form>
+</div>
 {{end}}
