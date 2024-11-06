@@ -73,3 +73,8 @@ func createNewEventController(w http.ResponseWriter, r *http.Request) {
     // Redirect to the index page or event detail page
     http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+// Controller to render the registration form
+func registerFormController(w http.ResponseWriter, r *http.Request) {
+    tmpl["register"].Execute(w, nil)
+}
