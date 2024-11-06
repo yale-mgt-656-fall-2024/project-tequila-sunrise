@@ -13,5 +13,8 @@ func createRoutes() chi.Router {
     r.Get("/events/new", newEventFormController)
     r.Post("/events/new", createNewEventController)
 
+    // Route for displaying the registration form
+    r.Get("/register", registerFormController)
+
     return r
 }
