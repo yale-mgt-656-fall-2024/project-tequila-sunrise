@@ -18,6 +18,11 @@ func createRoutes() chi.Router {
 
     // Optional: Route for RSVP (if implementing RSVP functionality)
     r.Post("/events/{id}/rsvp", rsvpController)
+    
+    // Route for displaying the registration form
+    r.Get("/register", registerFormController)
 
+    // Route for handling registration form submissions
+    r.Post("/register", registerUserController)
     return r
 }
