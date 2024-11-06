@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"time"
+    "strconv"
+    "github.com/go-chi/chi/v5"
 )
 
 func indexController(w http.ResponseWriter, r *http.Request) {
@@ -72,4 +74,71 @@ func createNewEventController(w http.ResponseWriter, r *http.Request) {
 
     // Redirect to the index page or event detail page
     http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func eventDetailController(w http.ResponseWriter, r *http.Request) {
+    // Extract the event ID from the URL
+    idStr := chi.URLParam(r, "id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        http.Error(w, "Invalid event ID", http.StatusBadRequest)
+        return
+    }
+
+    // Retrieve the event by ID
+    event, found := getEventByID(id)
+    if !found {
+        http.NotFound(w, r)
+        return
+    }
+
+    // Prepare the context data
+    type eventDetailContextData struct {
+        Event Event
+    }
+
+    contextData := eventDetailContextData{
+        Event: event,
+    }
+
+    // Render the template
+    tmpl["event_detail"].Execute(w, contextData)
+}
+
+func rsvpController(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodPost {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+
+    // Extract the event ID from the URL
+    idStr := chi.URLParam(r, "id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        http.Error(w, "Invalid event ID", http.StatusBadRequest)
+        return
+    }
+
+    // Parse form data
+    err = r.ParseForm()
+    if err != nil {
+        http.Error(w, "Error parsing form data", http.StatusBadRequest)
+        return
+    }
+
+    email := r.FormValue("email")
+    if email == "" {
+        http.Error(w, "Email is required", http.StatusBadRequest)
+        return
+    }
+
+    // Add attendee to the event
+    err = addAttendee(id, email)
+    if err != nil {
+        http.Error(w, "Error adding attendee: "+err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    // Redirect back to the event detail page
+    http.Redirect(w, r, "/events/"+idStr, http.StatusSeeOther)
 }
