@@ -1,0 +1,24 @@
+{{template "layout" .}}
+
+{{define "title"}}
+    Create a New Event
+{{end}}
+
+{{define "content"}}
+<h1>Create a New Event</h1>
+<form method="POST" action="/events/new">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location" required><br><br>
+
+    <label for="image">Image URL:</label><br>
+    <input type="text" id="image" name="image"><br><br>
+
+    <label for="date">Date and Time:</label><br>
+    <input type="datetime-local" id="date" name="date" required><br><br>
+
+    <input type="submit" value="Create Event">
+</form>
+{{end}}
