@@ -1,28 +1,27 @@
-package main
-
-import (
-    "github.com/go-chi/chi/v5"
-)
-
 func createRoutes() chi.Router {
-    r := chi.NewRouter()
-    r.Get("/", indexController)
-    addStaticFileServer(r, "/static/", "staticfiles")
+	r := chi.NewRouter()
 
-    // Routes for creating a new event
-    r.Get("/events/new", newEventFormController)
-    r.Post("/events/new", createNewEventController)
+	// Apply middleware
+	r.Use(authMiddleware)
 
-    // Route for event details
-    r.Get("/events/{id}", eventDetailController)
+	// Public routes
+	r.Get("/", indexController)
+	r.Get("/login", loginFormController)
+	r.Post("/login", loginUserController)
+	r.Get("/register", registerFormController)
+	r.Post("/register", registerUserController)
 
-    // Optional: Route for RSVP (if implementing RSVP functionality)
-    r.Post("/events/{id}/rsvp", rsvpController)
-    
-    // Route for displaying the registration form
-    r.Get("/register", registerFormController)
+	// Static files
+	addStaticFileServer(r, "/static/", "staticfiles")
 
-    // Route for handling registration form submissions
-    r.Post("/register", registerUserController)
-    return r
+	// Protected routes
+	r.Group(func(r chi.Router) {
+		r.Use(authRequired)
+		r.Get("/events/new", newEventFormController)
+		r.Post("/events/new", createNewEventController)
+		r.Get("/events/{id}", eventDetailController)
+		r.Post("/events/{id}/rsvp", rsvpController)
+	})
+
+	return r
 }
