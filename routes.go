@@ -1,27 +1,33 @@
+package main
+
+import (
+    "github.com/go-chi/chi/v5"
+)
+
 func createRoutes() chi.Router {
-	r := chi.NewRouter()
+    r := chi.NewRouter()
 
-	// Apply middleware
-	r.Use(authMiddleware)
+    // Apply middleware
+    r.Use(authMiddleware)
 
-	// Public routes
-	r.Get("/", indexController)
-	r.Get("/login", loginFormController)
-	r.Post("/login", loginUserController)
-	r.Get("/register", registerFormController)
-	r.Post("/register", registerUserController)
+    // Public routes
+    r.Get("/", indexController)
+    r.Get("/login", loginFormController)
+    r.Post("/login", loginUserController)
+    r.Get("/register", registerFormController)
+    r.Post("/register", registerUserController)
 
-	// Static files
-	addStaticFileServer(r, "/static/", "staticfiles")
+    // Static files
+    addStaticFileServer(r, "/static/", "staticfiles")
 
-	// Protected routes
-	r.Group(func(r chi.Router) {
-		r.Use(authRequired)
-		r.Get("/events/new", newEventFormController)
-		r.Post("/events/new", createNewEventController)
-		r.Get("/events/{id}", eventDetailController)
-		r.Post("/events/{id}/rsvp", rsvpController)
-	})
+    // Protected routes
+    r.Group(func(r chi.Router) {
+        r.Use(authRequired)
+        r.Get("/events/new", newEventFormController)
+        r.Post("/events/new", createNewEventController)
+        r.Get("/events/{id}", eventDetailController)
+        r.Post("/events/{id}/rsvp", rsvpController)
+    })
 
-	return r
+    return r
 }

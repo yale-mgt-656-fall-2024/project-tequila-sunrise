@@ -1,18 +1,21 @@
 package main
 
 import (
-	"net/http"
-	"os"
+    "log"
+    "net/http"
 )
 
-func getEnv(key string, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
-}
-
 func main() {
-	r := createRoutes()
-	http.ListenAndServe(":"+getEnv("PORT", "8080"), r)
+    // Create the router
+    r := createRoutes()
+
+    // Get the port from the environment variable or default to 8080
+    port := getEnv("PORT", "8080")
+
+    // Start the server
+    log.Println("Server is running on port " + port)
+    err := http.ListenAndServe(":"+port, r)
+    if err != nil {
+        log.Fatal(err)
+    }
 }
