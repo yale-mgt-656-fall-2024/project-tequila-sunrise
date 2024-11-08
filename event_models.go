@@ -16,6 +16,7 @@ type Event struct {
 	Image     string             `bson:"image" json:"image"`
 	Date      time.Time          `bson:"date" json:"date"`
 	Attending []string           `bson:"attending" json:"attending"`
+	CreatedBy primitive.ObjectID `bson:"created_by" json:"created_by"`
 }
 
 // getEventByID - returns the event with the specified id
@@ -32,6 +33,27 @@ func getEventByID(id string) (Event, bool) {
 		return Event{}, false
 	}
 	return event, true
+}
+
+// getEventsByUser - returns all events created by a specific user
+func getEventsByUser(userID primitive.ObjectID) ([]Event, error) {
+	collection := getCollection("events")
+	cursor, err := collection.Find(context.TODO(), bson.M{"created_by": userID})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
+
+	var events []Event
+	for cursor.Next(context.TODO()) {
+		var event Event
+		err := cursor.Decode(&event)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, event)
+	}
+	return events, nil
 }
 
 // getAllEvents - returns all events

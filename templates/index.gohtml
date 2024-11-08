@@ -4,6 +4,7 @@
     Yale Events
 {{end}}
 
+
 {{define "content"}}
 <div class="container">
     <h1>Yale Events</h1>
@@ -13,23 +14,36 @@
     <p>
         <a href="/events/new" class="button">Create a New Event</a>
     </p>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <a href="/?filter=all" class="{{if eq .Filter "all"}}active{{end}}">All Events</a>
+        {{if .User}}
+            <a href="/?filter=my" class="{{if eq .Filter "my"}}active{{end}}">My Events</a>
+        {{end}}
+    </div>
+
+    <!-- Event List -->
     <ul class="event-list">
         {{range .Events}}
             <li>
                 <div class="event-image">
-                    {{if .Image}}
-                        <img src="{{.Image}}" alt="{{.Title}}">
+                    {{if .Event.Image}}
+                        <img src="{{.Event.Image}}" alt="{{.Event.Title}}">
                     {{else}}
-                        <img src="/static/default-event.jpg" alt="{{.Title}}">
+                        <img src="/static/default-event.jpg" alt="{{.Event.Title}}">
                     {{end}}
                 </div>
                 <div class="event-details">
-                    <a href="/events/{{.ID}}">{{.Title}}</a>
+                    <a href="/events/{{.Event.ID}}">{{.Event.Title}}</a>
                     <p>
-                        <strong>Date:</strong> {{.Date.Format "Jan 02, 2006 at 3:04 PM"}}
+                        <strong>Date:</strong> {{.Event.Date.Format "Jan 02, 2006 at 3:04 PM"}}
                     </p>
                     <p>
-                        <strong>Location:</strong> {{.Location}}
+                        <strong>Location:</strong> {{.Event.Location}}
+                    </p>
+                    <p>
+                        <strong>Created By:</strong> {{.CreatorEmail}}
                     </p>
                 </div>
             </li>

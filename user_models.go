@@ -27,3 +27,13 @@ func addUser(user User) error {
 	_, err := collection.InsertOne(context.TODO(), user)
 	return err
 }
+
+// getUserByID - returns the user with the specified ID
+func getUserByID(id primitive.ObjectID) (User, error) {
+    collection := getCollection("users")
+    var user User
+    err := collection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&user)
+    return user, err
+}
+
+

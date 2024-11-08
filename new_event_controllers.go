@@ -12,6 +12,18 @@ func newEventFormController(w http.ResponseWriter, r *http.Request) {
 
 // Handles the form submission to create a new event
 func createNewEventController(w http.ResponseWriter, r *http.Request) {
+	// Ensure the user is logged in
+	ctxUser := r.Context().Value("user")
+	if ctxUser == nil {
+		http.Error(w, "Unauthorized: Please log in to create an event", http.StatusUnauthorized)
+		return
+	}
+	user, ok := ctxUser.(User)
+	if !ok {
+		http.Error(w, "Invalid user data", http.StatusInternalServerError)
+		return
+	}
+
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Error parsing form data", http.StatusBadRequest)
@@ -30,10 +42,11 @@ func createNewEventController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	event := Event{
-		Title:    title,
-		Location: location,
-		Image:    image,
-		Date:     date,
+		Title:     title,
+		Location:  location,
+		Image:     image,
+		Date:      date,
+		CreatedBy: user.ID,
 	}
 
 	err = addEvent(event)
