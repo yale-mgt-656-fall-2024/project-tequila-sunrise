@@ -6,18 +6,31 @@
 
 {{define "content"}}
 <div class="container">
-    <h1>Register</h1>
+    <h1>Register for Event</h1>
     <form method="POST" action="/register">
         <div class="form-input">
-            <label class="form-label" for="email">Email:</label>
+            <label class="form-label" for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="email">Email Address:</label>
             <input type="email" id="email" name="email" required>
         </div>
         <div class="form-input">
-            <label class="form-label" for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <label class="form-label" for="phone">Phone Number (optional):</label>
+            <input type="tel" id="phone" name="phone">
+            <small>Include a contact number if preferred.</small>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="comments">Additional Comments (optional):</label>
+            <textarea id="comments" name="comments" rows="3"></textarea>
+            <small>Any additional information or requests.</small>
         </div>
         <button type="submit" class="button">Register</button>
     </form>
-    <p>Already have an account? <a href="/login">Login here</a>.</p>
 </div>
 {{end}}
