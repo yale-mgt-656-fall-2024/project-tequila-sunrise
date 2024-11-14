@@ -96,7 +96,8 @@ button {
 input[type="submit"],
 button,
 a.button {
-    background-color: #00356B; /* Yale Blue */
+    /*background-color: #00356B; /* Yale Blue */
+    background-color: #FFFFFF; /* Yale Blue */
     color: #FFFFFF;
     padding: 0.75rem 1.5rem;
     border: none;
@@ -118,9 +119,7 @@ a.button:hover {
 input[type="submit"]:active,
 button:active,
 a.button:active {
-    /*background-color: #002244; /* Darker Yale Blue */
-    background-color: #FFFFFF; /* Darker Yale Blue */
-    
+    ßbackground-color: #002244; /* Darker Yale Blue */    
 }
 
 /* Event List Styles */
