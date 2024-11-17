@@ -64,7 +64,7 @@ func addAttendee(id string, email string) error {
 	}
 
 	filter := bson.M{"_id": objectID}
-	update := bson.M{"$push": bson.M{"attending": email}}
+	update := bson.M{"$addToSet": bson.M{"Attending": email}}
 
 	_, err = collection.UpdateOne(context.TODO(), filter, update)
 	return err
