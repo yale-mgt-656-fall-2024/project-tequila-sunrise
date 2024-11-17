@@ -10,6 +10,19 @@
     <p>
         Hi, today is {{.Today.Format "Jan 02, 2006"}}
     </p>
+
+    <!-- Search Form -->
+    <form action="/" method="get" class="search-form">
+        <input
+            type="text"
+            name="search"
+            value="{{.Search}}"
+            placeholder="Search events..."
+            class="search-input"
+        />
+        <button type="submit" class="button">Search</button>
+    </form>
+    
     <p>
         <a href="/events/new" class="button">Create a New Event</a>
     </p>

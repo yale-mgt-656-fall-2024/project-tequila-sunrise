@@ -10,10 +10,21 @@ func indexController(w http.ResponseWriter, r *http.Request) {
 		Events []Event
 		Today  time.Time
 		User   *User
+		Search string
 	}
 
-	// Get all events from the database
-	events, err := getAllEvents()
+	// Get the search term from the query parameters
+	searchTerm := r.URL.Query().Get("search")
+
+	var events []Event
+	var err error
+	if searchTerm != "" {
+		// Get events that match the search term
+		events, err = searchEvents(searchTerm)
+	} else {
+		// Get all events from the database
+		events, err = getAllEvents()
+	}
 	if err != nil {
 		http.Error(w, "Database error: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -32,6 +43,7 @@ func indexController(w http.ResponseWriter, r *http.Request) {
 		Events: events,
 		Today:  time.Now(),
 		User:   user,
+		Search: searchTerm,
 	}
 
 	// Execute the template with the context data

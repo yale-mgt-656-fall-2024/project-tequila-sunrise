@@ -76,3 +76,37 @@ func addEvent(event Event) error {
 	_, err := collection.InsertOne(context.TODO(), event)
 	return err
 }
+
+// searchEvents - returns events matching the search term in their title
+func searchEvents(searchTerm string) ([]Event, error) {
+    collection := getCollection("events")
+    
+    var filter bson.M
+    if searchTerm == "" {
+        filter = bson.M{} // empty filter to match all documents
+    } else {
+        filter = bson.M{
+            "title": bson.M{
+                "$regex":   searchTerm,
+                "$options": "i",
+            },
+        }
+    }
+    
+    cursor, err := collection.Find(context.TODO(), filter)
+    if err != nil {
+        return nil, err
+    }
+    defer cursor.Close(context.TODO())
+
+    var events []Event
+    for cursor.Next(context.TODO()) {
+        var event Event
+        if err := cursor.Decode(&event); err != nil {
+            return nil, err
+        }
+        events = append(events, event)
+    }
+    
+    return events, nil
+}
