@@ -7,23 +7,38 @@
 {{define "content"}}
 <div class="container">
     <h1>Register for Event</h1>
-    <form method="POST" action="/register">
+    <form id="registerForm" method="POST" action="/register">
         <div class="form-input">
             <label class="form-label" for="first_name">First Name:</label>
             <input type="text" id="first_name" name="first_name" required>
+            <small id="firstNameError" class="error-message"></small>
         </div>
         <div class="form-input">
             <label class="form-label" for="last_name">Last Name:</label>
             <input type="text" id="last_name" name="last_name" required>
+            <small id="lastNameError" class="error-message"></small>
         </div>
         <div class="form-input">
             <label class="form-label" for="email">Email Address:</label>
             <input type="email" id="email" name="email" required>
+            <small id="emailError" class="error-message"></small>
         </div>
         <div class="form-input">
             <label class="form-label" for="phone">Phone Number (optional):</label>
             <input type="tel" id="phone" name="phone">
+            <small id="phoneError" class="error-message"></small>
             <small>Include a contact number if preferred.</small>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <small id="passwordError" class="error-message"></small>
+            <small>Password must be at least 8 characters long and include both letters and numbers.</small>
+        </div>
+        <div class="form-input">
+            <label class="form-label" for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+            <small id="confirmPasswordError" class="error-message"></small>
         </div>
         <div class="form-input">
             <label class="form-label" for="comments">Additional Comments (optional):</label>
@@ -33,4 +48,67 @@
         <button type="submit" class="button">Register</button>
     </form>
 </div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+    let valid = true;
+
+    // Clear previous error messages
+    document.getElementById('firstNameError').innerText = "";
+    document.getElementById('lastNameError').innerText = "";
+    document.getElementById('emailError').innerText = "";
+    document.getElementById('phoneError').innerText = "";
+    document.getElementById('passwordError').innerText = "";
+    document.getElementById('confirmPasswordError').innerText = "";
+
+    // First Name validation
+    const firstName = document.getElementById('first_name').value;
+    if (firstName.trim() === "") {
+        document.getElementById('firstNameError').innerText = "First name cannot be empty.";
+        valid = false;
+    }
+
+    // Last Name validation
+    const lastName = document.getElementById('last_name').value;
+    if (lastName.trim() === "") {
+        document.getElementById('lastNameError').innerText = "Last name cannot be empty.";
+        valid = false;
+    }
+
+    // Email validation
+    const email = document.getElementById('email').value;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        document.getElementById('emailError').innerText = "Please enter a valid email address.";
+        valid = false;
+    }
+
+    // Phone number validation (optional)
+    const phone = document.getElementById('phone').value;
+    const phonePattern = /^\+?[0-9\s\-()]{7,20}$/;
+    if (phone && !phonePattern.test(phone)) {
+        document.getElementById('phoneError').innerText = "Please enter a valid phone number.";
+        valid = false;
+    }
+
+    // Password validation
+    const password = document.getElementById('password').value;
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordPattern.test(password)) {
+        document.getElementById('passwordError').innerText = "Password must be at least 8 characters long and include both letters and numbers.";
+        valid = false;
+    }
+
+    // Confirm Password validation
+    const confirmPassword = document.getElementById('confirm_password').value;
+    if (password !== confirmPassword) {
+        document.getElementById('confirmPasswordError').innerText = "Passwords do not match.";
+        valid = false;
+    }
+
+    if (!valid) {
+        event.preventDefault(); // Prevent form submission if validation fails
+    }
+});
+</script>
 {{end}}

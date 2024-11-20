@@ -8,8 +8,20 @@
 <div class="container">
     <h1>Yale Events</h1>
     <p>
-        Hi, today is {{.Today.Format "Jan 02, 2006"}}
+        Hi{{if .User}}, {{.User.FirstName}}{{end}}, today is {{.Today.Format "Jan 02, 2006"}}
     </p>
+
+    <!-- Display Logout Button if User is Logged In -->
+    {{if .User}}
+        <p>
+            <a href="/logout" class="button">Logout</a>
+        </p>
+    {{else}}
+        <p>
+            <a href="/login" class="button">Login</a>
+            <a href="/register" class="button">Register</a>
+        </p>
+    {{end}}
 
     <!-- Search Form -->
     <form action="/" method="get" class="search-form">
@@ -22,10 +34,14 @@
         />
         <button type="submit" class="button">Search</button>
     </form>
-    
-    <p>
-        <a href="/events/new" class="button">Create a New Event</a>
-    </p>
+
+    <!-- Create Event Button (Visible to Logged-In Users) -->
+    {{if .User}}
+        <p>
+            <a href="/events/new" class="button">Create a New Event</a>
+        </p>
+    {{end}}
+
     <ul class="event-list">
         {{range .Events}}
             <li>

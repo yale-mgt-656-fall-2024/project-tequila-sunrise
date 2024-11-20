@@ -17,6 +17,9 @@ func createRoutes() chi.Router {
     r.Get("/register", registerFormController)
     r.Post("/register", registerUserController)
 
+    // Add the logout route
+    r.Get("/logout", logoutUserController)
+
     // Static files
     addStaticFileServer(r, "/static/", "staticfiles")
 
