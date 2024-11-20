@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"html/template"
 	"time"
 )
 
@@ -48,6 +49,19 @@ func indexController(w http.ResponseWriter, r *http.Request) {
 
 	// Execute the template with the context data
 	err = tmpl["index"].Execute(w, contextData)
+	if err != nil {
+		http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func aboutController(w http.ResponseWriter, r *http.Request) {
+	// Define data for the About page
+	data := map[string]string{
+		"Title": "About Us",
+	}
+
+	// Parse and execute the About template
+	err := tmpl["about"].Execute(w, data)
 	if err != nil {
 		http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
 	}

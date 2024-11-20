@@ -16,6 +16,7 @@ func createRoutes() chi.Router {
     r.Post("/login", loginUserController)
     r.Get("/register", registerFormController)
     r.Post("/register", registerUserController)
+    r.Get("/about", aboutController) // Add the /about route here
 
     // Static files
     addStaticFileServer(r, "/static/", "staticfiles")
