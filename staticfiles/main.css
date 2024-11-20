@@ -118,7 +118,7 @@ a.button:hover {
 input[type="submit"]:active,
 button:active,
 a.button:active {
-    ßbackground-color: #002244; /* Darker Yale Blue */    
+    background-color: #002244; /* Darker Yale Blue */    
 }
 
 /* Event List Styles */
