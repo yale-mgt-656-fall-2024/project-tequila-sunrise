@@ -225,3 +225,43 @@ a.button:active {
         width: 100%;
     }
 }
+
+/* Logo Styles */
+header .logo img {
+    max-height: 100px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Navigation Menu Styles */
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0; /* Space below the logo */
+    text-align: center;
+}
+
+.nav-menu li {
+    display: inline-block;
+    margin: 0 15px; /* Spacing between menu items */
+}
+
+.nav-menu li a {
+    color: #FFFFFF; /* White text */
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1rem;
+}
+
+.nav-menu li a:hover {
+    color: #286DC0; /* Light Blue */
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments for Navigation */
+@media (max-width: 600px) {
+    .nav-menu li {
+        display: block; /* Stack menu items vertically on small screens */
+        margin: 10px 0;
+    }
+}
