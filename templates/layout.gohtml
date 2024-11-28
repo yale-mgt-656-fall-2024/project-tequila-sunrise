@@ -4,24 +4,43 @@
     <head>
         <title>{{template "title" .}}</title>
         <link rel="stylesheet" href="/static/main.css">
+        <script src="/static/main.js" defer></script>
     </head>
     <body>
         <header>
-            <!-- Logo -->
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/en/b/be/Yale_School_of_Management_shield.svg" alt="Yale SOM Shield" class="som-shield">
+            <div class="header-container">
+                <!-- Left Section: Logo -->
+                <div class="header-left">
+                    <h1 class="logo">Yale Events</h1>
+                </div>
+                <!-- Middle Section: Search Form -->
+                <div class="header-middle">
+                    <form action="/" method="get" class="search-form">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{.Search}}"
+                            placeholder="Search events..."
+                            class="search-input"
+                            id="search-input"
+                        />
+                        <button type="submit" class="button">Search</button>
+                    </form>
+                </div>
+                <!-- Right Section: Navigation Menu and Create Event Button -->
+                <div class="header-right">
+                    <nav>
+                        <ul class="nav-menu">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/">Events</a></li>
+                            <li><a href="/register">Register</a></li>
+                            <li><a href="/login">Login</a></li>
+                            <li><a href="/about">About</a></li>
+                        </ul>
+                    </nav>
+                    <a href="/events/new" class="button create-event-button">Create Event</a>
+                </div>
             </div>
-            
-            <!-- Navigation Menu -->
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/">Events</a></li>
-                    <li><a href="/register">Register</a></li>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/about">About</a></li> <!-- Added About link -->
-                </ul>
-            </nav>
         </header>
         <div class="container">
             {{template "content" .}}

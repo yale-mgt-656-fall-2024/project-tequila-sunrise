@@ -5,53 +5,30 @@
 {{end}}
 
 {{define "content"}}
-<div class="container">
-    <h1>Yale Events</h1>
-    <p>
-        Hi, today is {{.Today.Format "Jan 02, 2006"}}
-    </p>
-
-    <!-- Search Form -->
-    <form action="/" method="get" class="search-form">
-        <input
-            type="text"
-            name="search"
-            value="{{.Search}}"
-            placeholder="Search events..."
-            class="search-input"
-        />
-        <button type="submit" class="button">Search</button>
-    </form>
-    
-    <p>
-        <a href="/events/new" class="button">Create a New Event</a>
-    </p>
-    <ul class="event-list">
-        {{range .Events}}
-            <li>
-                <div class="event-image">
-                    {{if .Image}}
-                        <img src="{{.Image}}" alt="{{.Title}}">
-                    {{else}}
-                        <img src="/static/default-event.jpg" alt="{{.Title}}">
-                    {{end}}
-                </div>
-                <div class="event-details">
-                    <a href="/events/{{.ID}}">{{.Title}}</a>
-                    <p>
-                        <strong>Date:</strong> {{.Date.Format "Jan 02, 2006 at 3:04 PM"}}
-                    </p>
-                    <p>
-                        <strong>Location:</strong> {{.Location}}
-                    </p>
-                    <p>
-                        <a href="/events/{{.ID}}" class="button">Register Now</a>
-                    </p>
-                </div>
-            </li>
-        {{else}}
-            <li>No events available.</li>
-        {{end}}
-    </ul>
+<div class="events-section">
+    <table class="events-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date &amp; Time</th>
+                <th>Location</th>
+                <th>Register</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Events}}
+            <tr>
+                <td><a href="/events/{{.ID}}">{{.Title}}</a></td>
+                <td>{{.Date.Format "Jan 02, 2006 at 3:04 PM"}}</td>
+                <td>{{.Location}}</td>
+                <td><a href="/events/{{.ID}}">Register Now</a></td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="4">No events available.</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
 </div>
 {{end}}
