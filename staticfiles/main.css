@@ -1,14 +1,41 @@
 /* Base Styles */
 body {
-    margin: 2rem auto;
     font-family: Arial, sans-serif;
-    background-color: #F4F4F4; /* Light Gray */
+    background-color: #ffffff; /* Light Gray */
     color: #333333; /* Dark Gray */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #00356B; /* Yale Blue */
+}
+
+a {
+    color: #00356B; /* Yale Blue */
+    text-decoration: none;
+    font-weight: lighter;
+}
+
+img {
+    border-radius: 8px;
+}
+
+/* Wrapper Styles */
+.wrapper {
+    min-height: 100vh; /* Minimum height of 100% viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container Styles */
+.container {
+    background-color: #FFFFFF;
+    border-radius: 8px; /* Rounded borders */
+    flex: 1;
 }
 
 /* Header Styles */
 header {
-    background-color: #ffffff; /* Yale Blue */
+    background-color: #FFFFFF; /* White */
     color: #00356B;
     padding: 0.5rem 1rem;
     border-radius: 8px; /* Rounded borders */
@@ -23,7 +50,13 @@ header {
 
 /* Left Section: Logo */
 .header-left .logo h1 {
-    color:#ffffff;
+    color: #FFFFFF;
+}
+
+header .logo img {
+    height: 50px; /* Adjusted height */
+    margin-right: 10px;
+    display: inline-block;
 }
 
 /* Middle Section: Search Form */
@@ -41,7 +74,7 @@ header {
 .search-form .search-input {
     flex-grow: 1;
     padding: 0.5rem 1rem;
-    border-radius: 25px;
+    border-radius: 10px;
     border: 1px solid #CCCCCC;
     outline: none;
 }
@@ -75,15 +108,9 @@ header {
 }
 
 .nav-menu li a {
-    color: #00356B; /* White text */
-    font-weight: bold;
+    color: #000000;
     text-decoration: none;
     font-size: 1rem;
-}
-
-.nav-menu li a:hover {
-    color: #286DC0; /* Light Blue */
-    text-decoration: underline;
 }
 
 .create-event-button {
@@ -125,27 +152,6 @@ header {
         margin-left: 0;
         margin-top: 10px;
     }
-}
-
-h1, h2, h3, h4, h5, h6 {
-    color: #00356B; /* Yale Blue */
-}
-
-a {
-    color: #00356B; /* Yale Blue */
-    text-decoration: none;
-}
-
-img {
-    border-radius: 8px;
-}
-
-/* Container Styles */
-.container {
-    background-color: #FFFFFF;
-    padding: 2rem;
-    border-radius: 8px; /* Rounded borders */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Styles */
@@ -192,8 +198,8 @@ select:focus {
 input[type="submit"],
 button,
 a.button {
-    background-color: #00366b00; /* Yale Blue */
-    color: #00356B;
+    background-color: #dbdbdb;
+    color: #000000;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 25px; /* Fully rounded corners */
@@ -207,48 +213,17 @@ a.button {
 input[type="submit"]:hover,
 button:hover,
 a.button:hover {
-    background-color: #286DC0; /* Light Blue */
+    background-color: #E0E0E0; /* Light Gray */
 }
 
 .button:active,
 input[type="submit"]:active,
 button:active,
 a.button:active {
-    background-color: #002244; /* Darker Yale Blue */    
+    background-color: #CCCCCC; /* Darker Gray */
 }
 
-/* Event List Styles */
-.event-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.event-list li {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #E0E0E0;
-}
-
-.event-list li:last-child {
-    border-bottom: none;
-}
-
-.event-image {
-    flex: 0 0 150px;
-    height: 100px;
-    margin-right: 1rem;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.event-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
+/* Event Details */
 .event-details {
     display: flex;
 }
@@ -292,6 +267,43 @@ a.button:active {
     color: #555555;
 }
 
+/* Event Table Styles */
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left; /* Left-align the table */
+}
+
+.events-table th {
+    padding: 0.5rem 0.75rem; /* Increased padding for more space */
+    font-size: 1rem; /* Uniform text size */
+}
+
+.events-table td {
+    padding: 0.5rem 0.75rem; /* Increased padding for more space */
+    font-size: 0.9rem; /* Uniform text size */
+}
+
+.events-table th {
+    color: #000000;
+    font-weight: lighter;
+    border-top: 2px solid #CCCCCC;
+    border-bottom: 2px solid #CCCCCC; /* Bottom border to section off headers */
+}
+
+.events-table tr:nth-child(even) {
+    background-color: #F9F9F9; /* Light Gray */
+}
+
+.events-table tr:nth-child(odd) {
+    background-color: #FFFFFF; /* White */
+}
+
+.events-table a {
+    color: #000000; /* Yale Blue */
+    text-decoration: none;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 600px) {
     body {
@@ -306,27 +318,25 @@ a.button:active {
         padding: 1rem;
     }
 
-    .event-list li {
-        flex-direction: column;
-        align-items: flex-start;
+    .events-table th,
+    .events-table td {
+        padding: 0.75rem;
     }
 
-    .event-image {
-        width: 100%;
+    .events-table tr {
         height: auto;
-        margin-bottom: 1rem;
-    }
-
-    .event-details {
-        width: 100%;
     }
 }
 
-/* Logo Styles */
-header .logo img {
-    height: 50px; /* Adjusted height */
-    margin-right: 10px;
-    display: inline-block;
+/* Footer Styles */
+footer {
+    background-color: #FFFFFF; /* White */
+    color: #000000;
+    font-size: 0.9rem;
+    padding-top: 3rem;
+    border-radius: 8px;
+    margin-bottom: 0;
+    margin-top: auto; /* Pushes footer to the bottom */
 }
 
 /* About Page Styles */

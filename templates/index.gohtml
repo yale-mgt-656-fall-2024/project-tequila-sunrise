@@ -10,7 +10,8 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Date &amp; Time</th>
+                <th>Date</th>
+                <th>Time</th>
                 <th>Location</th>
                 <th>Register</th>
             </tr>
@@ -19,13 +20,14 @@
             {{range .Events}}
             <tr>
                 <td><a href="/events/{{.ID}}">{{.Title}}</a></td>
-                <td>{{.Date.Format "Jan 02, 2006 at 3:04 PM"}}</td>
+                <td>{{.Date.Format "Jan 02, 2006"}}</td>
+                <td>{{.Date.Format "3:04 PM"}}</td>
                 <td>{{.Location}}</td>
                 <td><a href="/events/{{.ID}}">Register Now</a></td>
             </tr>
             {{else}}
             <tr>
-                <td colspan="4">No events available.</td>
+                <td colspan="5">No events available.</td>
             </tr>
             {{end}}
         </tbody>
