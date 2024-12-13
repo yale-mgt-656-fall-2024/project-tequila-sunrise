@@ -56,18 +56,24 @@ func getAllEvents() ([]Event, error) {
 }
 
 // addAttendee - Adds an attendee to an event
-func addAttendee(id string, email string) error {
+func addAttendee(id string, email string) (bool, error) {
 	collection := getCollection("events")
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	filter := bson.M{"_id": objectID}
-	update := bson.M{"$push": bson.M{"attending": email}}
+	update := bson.M{"$addToSet": bson.M{"Attending": email}}
 
-	_, err = collection.UpdateOne(context.TODO(), filter, update)
-	return err
+	// Perform the update and check if a change was made
+	result, err := collection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return false, err
+	}
+
+	// If modified count is 0, the user was already registered
+	return result.ModifiedCount > 0, nil
 }
 
 // addEvent - Adds an event to the collection
@@ -75,4 +81,38 @@ func addEvent(event Event) error {
 	collection := getCollection("events")
 	_, err := collection.InsertOne(context.TODO(), event)
 	return err
+}
+
+// searchEvents - returns events matching the search term in their title
+func searchEvents(searchTerm string) ([]Event, error) {
+    collection := getCollection("events")
+    
+    var filter bson.M
+    if searchTerm == "" {
+        filter = bson.M{} // empty filter to match all documents
+    } else {
+        filter = bson.M{
+            "title": bson.M{
+                "$regex":   searchTerm,
+                "$options": "i",
+            },
+        }
+    }
+    
+    cursor, err := collection.Find(context.TODO(), filter)
+    if err != nil {
+        return nil, err
+    }
+    defer cursor.Close(context.TODO())
+
+    var events []Event
+    for cursor.Next(context.TODO()) {
+        var event Event
+        if err := cursor.Decode(&event); err != nil {
+            return nil, err
+        }
+        events = append(events, event)
+    }
+    
+    return events, nil
 }

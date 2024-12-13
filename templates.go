@@ -16,5 +16,5 @@ func init() {
 	tmpl["event_detail"] = m(p("templates/event_detail.gohtml", "templates/layout.gohtml"))
 	tmpl["login"] = m(p("templates/login.gohtml", "templates/layout.gohtml"))
 	tmpl["register"] = m(p("templates/register.gohtml", "templates/layout.gohtml"))
-	tmpl["about"] = m(p("templates/about.gohtml", "templates/layout.gohtml")) // Added about template
+	tmpl["about"] = m(p("templates/about.gohtml", "templates/layout.gohtml"))
 }

@@ -12,12 +12,17 @@ import (
 var dbClient *mongo.Client
 
 func init() {
+	dbClient = connectToMongo("mongodb+srv://makerstate:ALHXB%5FtKQN27YZC@cluster0.o2beiyt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+}
+
+// connectToMongo establishes a MongoDB connection
+func connectToMongo(uri string) *mongo.Client {
 	// Define ServerAPIOptions
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 
 	// Set client options
 	clientOptions := options.Client().
-		ApplyURI("mongodb+srv://makerstate:ALHXB%5FtKQN27YZC@cluster0.o2beiyt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").
+		ApplyURI(uri).
 		SetServerAPIOptions(serverAPI)
 
 	// Connect to MongoDB
@@ -36,8 +41,8 @@ func init() {
 	}
 
 	log.Println("Connected to MongoDB!")
-	dbClient = client
-}
+	return client
+}				
 
 // getCollection returns a reference to a MongoDB collection
 func getCollection(collectionName string) *mongo.Collection {

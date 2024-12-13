@@ -6,36 +6,40 @@
         <link rel="stylesheet" href="/static/main.css">
 
         <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2KBJF2S62X"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-2KBJF2S62X');
-</script>
-
-
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-2KBJF2S62X"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-2KBJF2S62X');
+        </script>
     </head>
     <body>
         <header>
             <!-- Logo -->
-            <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/en/b/be/Yale_School_of_Management_shield.svg" alt="Yale SOM Shield" class="som-shield">
-            </div>
             
             <!-- Navigation Menu -->
             <nav>
                 <ul class="nav-menu">
+                    <li>BlueCal</li>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/events">Events</a></li>
-                    <li><a href="/register">Register</a></li>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/about">About</a></li> <!-- Added About link -->
+                    <li><a href="/about">About</a></li>
+                    
+                    {{if .IsLoggedIn}}
+                        <li><a href="/logout">Logout</a></li>
+                    {{else}}
+                        <li><a href="/register">Register</a></li>
+                        <li><a href="/login">Login</a></li>
+                    {{end}}
                 </ul>
             </nav>
         </header>
         <div class="container">
+            {{if .Message}}
+                <div role="alert">
+                    {{.Message}}
+                </div>
+            {{end}}
             {{template "content" .}}
         </div>
         <footer>

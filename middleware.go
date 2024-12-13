@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,16 +11,28 @@ import (
 
 func authMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		session, _ := store.Get(r, "session")
+		session, err := store.Get(r, "session")
+		if err != nil {
+			log.Printf("Session error: %v\n", err)
+		}
+
 		userID, ok := session.Values["user_id"].(string)
-		if ok {
+		isLoggedIn := false
+
+		if ok && userID != "" {
 			user, err := getUserByID(userID)
 			if err == nil {
 				// Attach user to context
 				ctx := context.WithValue(r.Context(), "user", user)
 				r = r.WithContext(ctx)
+				isLoggedIn = true
 			}
 		}
+
+		// Add `isLoggedIn` to the request context
+		ctx := context.WithValue(r.Context(), "isLoggedIn", isLoggedIn)
+		r = r.WithContext(ctx)
+
 		next.ServeHTTP(w, r)
 	})
 }
