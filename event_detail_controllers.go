@@ -49,44 +49,80 @@ func eventDetailController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Retrieve the flash message from the session
+	session, _ := store.Get(r, "session")
+	message, _ := session.Values["flash"].(string)
+	delete(session.Values, "flash") // Clear the flash message
+	session.Save(r, w)
+
+	// Extract IsLoggedIn from the context
+	isLoggedIn := r.Context().Value("isLoggedIn").(bool)
+
+	// Context data for the template
 	contextData := struct {
-		Event Event
+		Event      Event
+		IsLoggedIn bool
+		Message    string
 	}{
-		Event: event,
+		Event:      event,
+		IsLoggedIn: isLoggedIn,
+		Message:    message,
 	}
 
-	tmpl["event_detail"].Execute(w, contextData)
+	// Execute the template with context data
+	err := tmpl["event_detail"].Execute(w, contextData)
+	if err != nil {
+		http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+	}
 }
 
-// Handles RSVP form submission
+// Handles RSVP submission
 func rsvpController(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
+	// Extract the event ID from the URL
 	id := chi.URLParam(r, "id")
 	id = strings.TrimPrefix(id, "ObjectID(")
 	id = strings.TrimSuffix(id, ")")
 	id = strings.Trim(id, "\"") // Remove quotes
 
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "Error parsing form data", http.StatusBadRequest)
+	// Check if the user is logged in
+	ctxUser := r.Context().Value("user")
+	if ctxUser == nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
-	email := r.FormValue("email")
-	if email == "" {
-		http.Error(w, "Email is required", http.StatusBadRequest)
+	user, ok := ctxUser.(User)
+	if !ok {
+		http.Error(w, "Invalid user context", http.StatusInternalServerError)
 		return
 	}
 
-	err = addAttendee(id, email)
+	// Use the logged-in user's email
+	email := user.Email
+
+	// Add the user as an attendee
+	registered, err := addAttendee(id, email)
 	if err != nil {
 		http.Error(w, "Error adding attendee: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// Set the message based on the RSVP status
+	message := "Successfully registered for the event."
+	if !registered {
+		message = "You are already registered for this event."
+	}
+
+	// Store the flash message in the session
+	session, _ := store.Get(r, "session")
+	session.Values["flash"] = message
+	session.Save(r, w)
+
+	// Redirect to the event details page
 	http.Redirect(w, r, "/events/"+id, http.StatusSeeOther)
 }

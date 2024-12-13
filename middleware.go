@@ -14,19 +14,25 @@ func authMiddleware(next http.Handler) http.Handler {
 		session, err := store.Get(r, "session")
 		if err != nil {
 			log.Printf("Session error: %v\n", err)
-			next.ServeHTTP(w, r)
-			return
 		}
 
 		userID, ok := session.Values["user_id"].(string)
+		isLoggedIn := false
+
 		if ok && userID != "" {
 			user, err := getUserByID(userID)
 			if err == nil {
 				// Attach user to context
 				ctx := context.WithValue(r.Context(), "user", user)
 				r = r.WithContext(ctx)
+				isLoggedIn = true
 			}
 		}
+
+		// Add `isLoggedIn` to the request context
+		ctx := context.WithValue(r.Context(), "isLoggedIn", isLoggedIn)
+		r = r.WithContext(ctx)
+
 		next.ServeHTTP(w, r)
 	})
 }
@@ -45,7 +51,6 @@ func getUserByID(id string) (User, error) {
 func authRequired(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user := r.Context().Value("user")
-		log.Printf("AuthRequired - User in context: %+v\n", user)
 		if user == nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return

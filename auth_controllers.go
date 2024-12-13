@@ -12,9 +12,31 @@ func registerFormController(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	tmpl["register"].Execute(w, nil)
+
+	// Check if the user is already logged in
+	isLoggedIn := r.Context().Value("isLoggedIn").(bool)
+	if isLoggedIn {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Retrieve the flash message from the session
+	session, _ := store.Get(r, "session")
+	message, _ := session.Values["flash"].(string)
+	delete(session.Values, "flash") // Clear the flash message after retrieving it
+	session.Save(r, w)
+
+	// Render the registration form with the message
+	err := tmpl["register"].Execute(w, map[string]interface{}{
+		"Message":    message,
+		"IsLoggedIn": isLoggedIn,
+	})
+	if err != nil {
+		http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+	}
 }
 
+// registerUserController processes the registration form
 // registerUserController processes the registration form
 func registerUserController(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -30,6 +52,17 @@ func registerUserController(w http.ResponseWriter, r *http.Request) {
 
 	email := r.FormValue("email")
 	password := r.FormValue("password")
+
+	// Check if the email is already registered
+	_, err = getUserByEmail(email)
+	if err == nil {
+		// User already exists, redirect back to the register page with a message
+		session, _ := store.Get(r, "session")
+		session.Values["flash"] = "Email is already registered."
+		session.Save(r, w)
+		http.Redirect(w, r, "/register", http.StatusSeeOther)
+		return
+	}
 
 	// Hash the password
 	hashedPassword, err := hashPassword(password)
@@ -50,7 +83,12 @@ func registerUserController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redirect to login page or auto-login
+	// Set flash message for successful registration
+	session, _ := store.Get(r, "session")
+	session.Values["flash"] = "Account successfully created. Please log in."
+	session.Save(r, w)
+
+	// Redirect to login page
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
@@ -60,7 +98,28 @@ func loginFormController(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	tmpl["login"].Execute(w, nil)
+
+	// Check if the user is already logged in
+	isLoggedIn := r.Context().Value("isLoggedIn").(bool)
+	if isLoggedIn {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Retrieve the flash message from the session
+	session, _ := store.Get(r, "session")
+	message, _ := session.Values["flash"].(string)
+	delete(session.Values, "flash") // Clear the flash message after retrieving it
+	session.Save(r, w)
+
+	// Render the login form with the message
+	err := tmpl["login"].Execute(w, map[string]interface{}{
+		"Message":    message,
+		"IsLoggedIn": isLoggedIn,
+	})
+	if err != nil {
+		http.Error(w, "Template execution error: "+err.Error(), http.StatusInternalServerError)
+	}
 }
 
 // loginUserController processes the login form
@@ -82,19 +141,28 @@ func loginUserController(w http.ResponseWriter, r *http.Request) {
 	// Get user by email
 	user, err := getUserByEmail(email)
 	if err != nil {
-		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		// Email not found, set flash message and redirect to login
+		session, _ := store.Get(r, "session")
+		session.Values["flash"] = "Invalid email or password."
+		session.Save(r, w)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
 	// Check password
 	if !checkPasswordHash(password, user.Password) {
-		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		// Password incorrect, set flash message and redirect to login
+		session, _ := store.Get(r, "session")
+		session.Values["flash"] = "Invalid email or password."
+		session.Save(r, w)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
-	// Set session cookie
+	// Set session cookie for successful login
 	session, _ := store.Get(r, "session")
 	session.Values["user_id"] = user.ID.Hex()
+	session.Values["flash"] = "Successfully logged in."
 	session.Save(r, w)
 
 	// Redirect to the home page
@@ -111,4 +179,25 @@ func hashPassword(password string) (string, error) {
 func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+// logoutController destroys the session and redirects to the home page
+func logoutController(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+
+	// Check if the user is logged in
+	if _, ok := session.Values["user_id"]; !ok {
+		// User is not logged in
+		session.Values["flash"] = "User not logged in."
+		session.Save(r, w)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// If user is logged in, log them out
+	delete(session.Values, "user_id")
+	session.Values["flash"] = "Successfully logged out."
+	session.Save(r, w)
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

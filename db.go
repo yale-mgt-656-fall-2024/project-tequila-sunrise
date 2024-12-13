@@ -42,7 +42,7 @@ func connectToMongo(uri string) *mongo.Client {
 
 	log.Println("Connected to MongoDB!")
 	return client
-}
+}				
 
 // getCollection returns a reference to a MongoDB collection
 func getCollection(collectionName string) *mongo.Collection {
