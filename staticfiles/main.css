@@ -2,7 +2,7 @@
 body {
     margin: 2rem auto;
     font-family: Arial, sans-serif;
-    background-color: #F4F4F4; /* Light Gray */
+    background-color: #ffffff; /* Light Gray */
     color: #333333; /* Dark Gray */
 }
 
@@ -11,8 +11,6 @@ header, footer {
     color: #FFFFFF;
     padding: 1rem;
     text-align: center;
-    border-radius: 8px; /* Rounded borders */
-    margin-bottom: 1rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -42,8 +40,6 @@ img.som-shield {
 .container {
     background-color: #FFFFFF;
     padding: 2rem;
-    border-radius: 8px; /* Rounded borders */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Styles */
@@ -82,12 +78,11 @@ textarea:focus,
 select:focus {
     outline: none;
     border-color: #286DC0; /* Light Blue */
-    box-shadow: 0 0 5px rgba(40, 109, 192, 0.5);
 }
 
 input[type="submit"],
 button {
-    margin-top: 1rem;
+    margin-left: 1rem;
 }
 
 /* Button Styles */
@@ -99,7 +94,7 @@ a.button {
     color: #FFFFFF;
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 25px; /* Fully rounded corners */
+    border-radius: 8px; /* Fully rounded corners */
     cursor: pointer;
     font-size: 1rem;
     display: inline-block;
@@ -197,17 +192,6 @@ a.button:active {
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
-    body {
-        margin: 1rem;
-    }
-
-    header, footer {
-        margin-bottom: 0.5rem;
-    }
-
-    .container {
-        padding: 1rem;
-    }
 
     .event-list li {
         flex-direction: column;
@@ -225,18 +209,11 @@ a.button:active {
     }
 }
 
-/* Logo Styles */
-header .logo img {
-    max-height: 200px;
-    display: block;
-    margin: 0 auto;
-}
 
 /* Navigation Menu Styles */
 .nav-menu {
     list-style: none;
     padding: 0;
-    margin: 1rem 0 0; /* Space below the logo */
     text-align: center;
 }
 
@@ -257,14 +234,6 @@ header .logo img {
     text-decoration: underline;
 }
 
-/* Responsive Adjustments for Navigation */
-@media (max-width: 600px) {
-    .nav-menu li {
-        display: block; /* Stack menu items vertically on small screens */
-        margin: 10px 0;
-    }
-}
-
 
 /* About Page Styles */
 .about p {
@@ -279,4 +248,24 @@ header .logo img {
 
 .about a:hover {
     text-decoration: underline;
+}
+
+/* Styles for the search and create container */
+.search-and-create {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+/* Adjust search form styling */
+.search-form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+/* Adjust search input */
+.search-input {
+    width: 500px;
 }
