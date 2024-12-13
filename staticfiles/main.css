@@ -183,12 +183,18 @@ a.button:active {
 
 .event-detail h1 {
     margin-bottom: 1rem;
-    color: #00356B; /* Yale Blue */
 }
 
 .event-detail p {
     margin-bottom: 0.5rem;
     color: #555555;
+}
+
+.event-details a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #00356B; /* Yale Blue */
+    text-decoration: none;
 }
 
 /* Responsive Adjustments */
