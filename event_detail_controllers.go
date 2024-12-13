@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"go.mongodb.org/mongo-driver/bson"
@@ -112,8 +114,12 @@ func rsvpController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Create a new random generator with a proper seed
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	confirmationCode := fmt.Sprintf("%06d", rng.Intn(1000000))
+
 	// Set the message based on the RSVP status
-	message := "Successfully registered for the event."
+	message := fmt.Sprintf("Successfully registered for the event. Your confirmation code is: %s", confirmationCode)
 	if !registered {
 		message = "You are already registered for this event."
 	}
