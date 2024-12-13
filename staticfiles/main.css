@@ -91,7 +91,7 @@ input[type="submit"],
 button,
 a.button {
     background-color: #00356B; /* Yale Blue */
-    color: #FFFFFF;
+    color: #FFFFFF; /* White text */
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 8px; /* Fully rounded corners */
@@ -190,13 +190,6 @@ a.button:active {
     color: #555555;
 }
 
-.event-details a {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #00356B; /* Yale Blue */
-    text-decoration: none;
-}
-
 /* Responsive Adjustments */
 @media (max-width: 600px) {
 
@@ -215,7 +208,6 @@ a.button:active {
         width: 100%;
     }
 }
-
 
 /* Navigation Menu Styles */
 .nav-menu {
@@ -241,6 +233,13 @@ a.button:active {
     text-decoration: underline;
 }
 
+/* Responsive Adjustments for Navigation */
+@media (max-width: 600px) {
+    .nav-menu li {
+        display: block; /* Stack menu items vertically on small screens */
+        margin: 10px 0;
+    }
+}
 
 /* About Page Styles */
 .about p {
