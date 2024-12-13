@@ -1,6 +1,5 @@
 /* Base Styles */
 body {
-    max-width: 800px;
     margin: 2rem auto;
     font-family: Arial, sans-serif;
     background-color: #F4F4F4; /* Light Gray */
@@ -160,7 +159,7 @@ a.button:active {
 .event-details a {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #00356B; /* Yale Blue */
+    color: #ffffff; /* Yale Blue */
     text-decoration: none;
 }
 
